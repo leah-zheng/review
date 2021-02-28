@@ -3550,3 +3550,283 @@ function test(){
 }
 ```
 
+## 数组去重
+
+### for循环
+
+```js
+var arr = [4,5,4,8,1,5,5,2,3,9,4,5];
+
+function unique(arr){
+	var temp = [],
+	isRepeat;
+		
+	for(var i = 0; i < arr.length; i++){
+		isRepeat = false;
+		for(var j = 0; j<temp.length;j++){
+			if(temp[j] == arr[i]){
+				isRepeat = true;
+				break;
+			}		
+		}
+		if(!isRepeat){
+			temp.push(arr[i])
+		}
+	}
+		return temp
+}
+```
+
+```js
+var arr = [4,5,4,8,1,5,5,2,3,9,4,5];
+function unique(arr){
+    var isRepeat,
+        temp = [];
+    for(var i = 0; i <arr.length; i++){
+        isRepeat = false;
+        for(var j = i+1;j < arr.length;j++){
+            if(arr[i]==arr[j]){
+                isRepeat = true;
+                break;
+            }
+        }
+        if(!isRepeat){
+            temp.push(arr[i]);
+        }
+    }
+    return temp;
+}
+```
+
+### filter
+
+```js
+function unique(arr){
+    return arr.filter((item,index)=>{
+        return arr.indexOf(item) === index
+    })
+}
+```
+
+### foreach
+
+```js
+function unique(arr){
+    var temp = [];
+    arr.forEach((item)=>{
+        if(temp.indexOf(item) === -1){
+            temp.push(item);
+        }
+    })
+    return temp;
+}
+```
+
+### sort
+
+```js
+function unique(arr){
+	var temp = [];
+    arr.sort();
+    for(var i = 0; i <arr.length;i ++){
+        if(arr[i] != arr[i+1]){
+            temp.push(arr[i]);
+        }
+    }
+    return temp;
+}
+```
+
+```js
+function unique(arr){
+	var temp = [];
+    arr.sort();
+    for(var i = 0; i <arr.length;i ++){
+        if(arr[i] != temp[temp.length-1]){
+            temp.push(arr[i]);
+        }
+    }
+    return temp;
+}
+```
+
+### es6  includes
+
+ includes与indexOf的区别
+
+array.includes 返回 true/false 
+
+array.indexOf 返回index/-1  NaN无效
+
+```js
+function unique(arr){
+	var temp = [];
+    arr.forEach(item => {
+        if(!temp.includes(item)){
+            temp.push(item)
+        }
+    })
+    return temp;
+}
+```
+
+### reduce
+
+```js
+function unique(arr){
+    var temp = [];
+	return arr.sort().reduce((prev,item)=>{
+       if(temp.length === 0 || prev[temp.length - 1] !== item){
+           temp.push(item);
+       }
+        return prev;
+    },[]);
+    
+}
+```
+
+### object
+
+```js
+function unique(arr){
+    var temp = [],
+        obj = {};
+    for(var i = 0;i < arr.length;i++){
+        if(!obj[arr[i]]){
+            obj[arr[i]] = 1;
+            temp.push(arr[i]);
+        }
+    }
+    return temp;
+}
+```
+
+### Map
+
+```js
+function unique(arr){
+    var temp = [],
+        map = new Map();
+    for(var i = 0;i < arr.length;i++){
+        if(!map.get(arr[i])){
+            map.set(arr[i],1);
+            temp.push(arr[i]);
+        }
+    }
+    return temp;
+}
+```
+
+### set
+
+```js
+function unique(arr){
+	return Array.from(new Set(arr)); //将类数组变为数组
+}
+```
+
+## 数组扁平化、去重与排序
+
+要求：编写一个程序将数组扁平化并将数组去重，最终得到一个升序并不重复的一组数组
+
+### 数组扁平化
+
+扁平化 -> 多维数组降维一维数组
+
+```js
+var arr = [[1,2],[3,6],[5,[2,6]],[3,5,2]];
+
+function flatten(arr){
+    var _arr = arr || [],
+        fArr = [],
+        len = _arr.length,
+        item;
+    for(var i = 0; i < len; i++){
+        item = _arr[i];
+        if(_isArr(item)){
+            fArr = fArr.concat(flatten(item));
+        }else{
+            fArr.push(item);
+        }
+    }
+    
+    return fArr;
+    
+    function _isArr(item){
+        return {}.toString.call(item) === '[object Array]'
+    }
+}
+```
+
+### foreach
+
+```js
+Array.prototype.flatten = function(){
+	var _arr = this,
+        toStr = {}.toString,
+        _fArr = [];
+    if(toStr.call(_arr)!=='[object Array]'){
+        throw new Errow('只有数组才能调用flatten方法')
+    }else{
+        _arr.forEach(item => {
+            toStr.call(item)==='[object array]'?
+                _fArr = _fArr.concat(item.flatten():
+                _fArr.push(item);
+            }
+        })
+    }
+   	return fArr;
+}
+```
+
+### reduce
+
+```js
+Array.prototype.flatten = function(){
+	var _arr = this,
+        toStr = {}.toString;
+    if(toStr.call(_arr)!=='[object Array]'){
+        throw new Errow('只有数组才能调用flatten方法')
+    }else{
+        return _arr.reduce((prev,item)=>{
+           return prev.concat(
+               toStr.call(item) === 'object Array'?
+               item.flatten() :  
+               item
+        },[]))
+    }
+}
+```
+
+```js
+var flatten = (arr)=>{
+	return arr.reduce((prev,item)=>{
+        return prev.concat(
+            {}.toString.call(item) === '[object Array]'?
+            flatten(item):
+        	item
+        )
+    },[]); 
+}
+-------------------------------------------
+var flatten = (arr)=>{
+	arr.reduce((prev,item)=>
+         prev.concat(
+            {}.toString.call(item) === '[object Array]'?
+            flatten(item):
+        	item
+        )
+    ,[]); 
+}
+```
+
+### es6  flat扁平化  set去重   
+
+```js
+var arr = [[1,2],[3,6],[5,[2,6]],[3,5,2]];
+
+Array.from(new Set(arr.flat(Infinity))).sort((a,b)=>a-b)
+```
+
+
+

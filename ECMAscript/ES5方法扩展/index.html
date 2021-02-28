@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        var arr = [1,2,3,5,2,2,4];
+        //foreach
+        Array.prototype.myforEach = function(fn){
+            var arr = this,
+                len = arr.length,
+                arg2 = arguments[1] || window;
+            for(var i = 0; i < len; i++){
+                fn.apply(arg2,[arr[i],i,arr]);
+            }
+        }
+
+        //filter
+        Array.prototype.myFilter = function(fn){
+            var arr = this,
+                len = arr.length,
+                arg2 = arguments[1] || window,
+                newArr = [],
+                item;
+            for(var i = 0;i < len;i++){
+                item = arr[i];
+                fn.apply(arg2,[arr[i],i,arr]) ? newArr.push(arr[i]) : ''
+            }
+
+            return newArr;
+        }
+
+        
+        //map
+        Array.prototype.myMap = function(fn){
+            var arr = this,
+                len = arr.length,
+                arg2 = arguments[1] || window,
+                newArr = [],
+                item;
+            for(var i = 0; i < len; i++){
+                item = arr[i];
+                newArr.push(fn.apply(arg2,[arr[i],i,arr])) 
+            }
+            return newArr;
+        }
+
+        
+        //every
+        Array.prototype.myevery = function(fn){
+            var arr = this,
+                len = arr.lengh,
+                arg2 = arguments[1] || window,
+                newArr = [],
+                res = true;
+            for(var i = 0;i<len;i++){
+                if(!fn.apply(arg2,[arr[i],i,arr])){
+                    res = false;
+                    break;
+                }
+            }
+            return res;
+        }
+
+        //some
+        Array.prototype.mySome = function(fn){
+            var arr = this,
+                len = arr.length,
+                arg2 = arguments[1] || window,
+                res = false;
+            for(var i= 0; i< len; i++){
+                if(fn.apply(arg2,[ele,idx,arr])){
+                    res = true;
+                    break;
+                }
+            }
+            return res;
+        }
+
+        //reduce
+        Array.prototype.myReduce = function(fn,prev){
+            var arr = this,
+                len = arr.length,
+                arg2 = arguments[2] || window;
+            for(var i = 0; i < len; i++){
+                prev = fn.apply(arg2,[newArr,arr[i],i,arr])
+            }
+            return prev;
+        }
+
+    </script>
+</body>
+</html>

@@ -87,7 +87,7 @@
                 len = arr.length,
                 arg2 = arguments[2] || window;
             for(var i = 0; i < len; i++){
-                prev = fn.apply(arg2,[newArr,arr[i],i,arr])
+                prev.push(fn.apply(arg2,[arr[i],i,arr,prev]))
             }
             return prev;
         }

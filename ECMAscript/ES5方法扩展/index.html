@@ -8,90 +8,116 @@
 <body>
     
     <script>
-        var arr = [1,2,3,5,2,2,4];
-        //foreach
-        Array.prototype.myforEach = function(fn){
-            var arr = this,
-                len = arr.length,
-                arg2 = arguments[1] || window;
-            for(var i = 0; i < len; i++){
-                fn.apply(arg2,[arr[i],i,arr]);
-            }
-        }
+        // var arr = [1,2,3,5,2,2,4];
+        // //foreach
+        // Array.prototype.myforEach = function(fn){
+        //     var arr = this,
+        //         len = arr.length,
+        //         arg2 = arguments[1] || window;
+        //     for(var i = 0; i < len; i++){
+        //         fn.apply(arg2,[arr[i],i,arr]);
+        //     }
+        // }
 
-        //filter
-        Array.prototype.myFilter = function(fn){
-            var arr = this,
-                len = arr.length,
-                arg2 = arguments[1] || window,
-                newArr = [],
-                item;
-            for(var i = 0;i < len;i++){
-                item = arr[i];
-                fn.apply(arg2,[arr[i],i,arr]) ? newArr.push(arr[i]) : ''
-            }
+        // //filter
+        // Array.prototype.myFilter = function(fn){
+        //     var arr = this,
+        //         len = arr.length,
+        //         arg2 = arguments[1] || window,
+        //         newArr = [],
+        //         item;
+        //     for(var i = 0;i < len;i++){
+        //         item = arr[i];
+        //         fn.apply(arg2,[arr[i],i,arr]) ? newArr.push(arr[i]) : ''
+        //     }
 
-            return newArr;
-        }
-
-        
-        //map
-        Array.prototype.myMap = function(fn){
-            var arr = this,
-                len = arr.length,
-                arg2 = arguments[1] || window,
-                newArr = [],
-                item;
-            for(var i = 0; i < len; i++){
-                item = arr[i];
-                newArr.push(fn.apply(arg2,[arr[i],i,arr])) 
-            }
-            return newArr;
-        }
+        //     return newArr;
+        // }
 
         
-        //every
-        Array.prototype.myevery = function(fn){
-            var arr = this,
-                len = arr.lengh,
-                arg2 = arguments[1] || window,
-                newArr = [],
-                res = true;
-            for(var i = 0;i<len;i++){
-                if(!fn.apply(arg2,[arr[i],i,arr])){
-                    res = false;
-                    break;
-                }
+        // //map
+        // Array.prototype.myMap = function(fn){
+        //     var arr = this,
+        //         len = arr.length,
+        //         arg2 = arguments[1] || window,
+        //         newArr = [],
+        //         item;
+        //     for(var i = 0; i < len; i++){
+        //         item = arr[i];
+        //         newArr.push(fn.apply(arg2,[arr[i],i,arr])) 
+        //     }
+        //     return newArr;
+        // }
+
+        
+        // //every
+        // Array.prototype.myevery = function(fn){
+        //     var arr = this,
+        //         len = arr.lengh,
+        //         arg2 = arguments[1] || window,
+        //         newArr = [],
+        //         res = true;
+        //     for(var i = 0;i<len;i++){
+        //         if(!fn.apply(arg2,[arr[i],i,arr])){
+        //             res = false;
+        //             break;
+        //         }
+        //     }
+        //     return res;
+        // }
+
+        // //some
+        // Array.prototype.mySome = function(fn){
+        //     var arr = this,
+        //         len = arr.length,
+        //         arg2 = arguments[1] || window,
+        //         res = false;
+        //     for(var i= 0; i< len; i++){
+        //         if(fn.apply(arg2,[ele,idx,arr])){
+        //             res = true;
+        //             break;
+        //         }
+        //     }
+        //     return res;
+        // }
+
+        // //reduce
+        // Array.prototype.myReduce = function(fn,prev){
+        //     var arr = this,
+        //         len = arr.length,
+        //         arg2 = arguments[2] || window;
+        //     for(var i = 0; i < len; i++){
+        //         prev.push(fn.apply(arg2,[arr[i],i,arr,prev]))
+        //     }
+        //     return prev;
+        // }
+
+        
+        var getData = (id) =>{
+            return new Promise((resolve,reject)=>{
+                $.ajax({
+                    url:'https://test.com/get?id='+id,
+                    type:'GET',
+                    success:(res => {
+                        resolve(res)
+                    })
+                })
+            })
+        }
+        var resTemp = [],
+            resList = [],
+            nowId = 1;
+        async function getReault(){
+            for(var i in 10){
+                resTemp.push(getData(nowId++))
             }
-            return res;
+            resList.push(await Promise.all(resTemp));
+            resTemp = [];
         }
 
-        //some
-        Array.prototype.mySome = function(fn){
-            var arr = this,
-                len = arr.length,
-                arg2 = arguments[1] || window,
-                res = false;
-            for(var i= 0; i< len; i++){
-                if(fn.apply(arg2,[ele,idx,arr])){
-                    res = true;
-                    break;
-                }
-            }
-            return res;
+        while(resTemp == []){
+            getReault()
         }
-
-        //reduce
-        Array.prototype.myReduce = function(fn,prev){
-            var arr = this,
-                len = arr.length,
-                arg2 = arguments[2] || window;
-            for(var i = 0; i < len; i++){
-                prev.push(fn.apply(arg2,[arr[i],i,arr,prev]))
-            }
-            return prev;
-        }
-
     </script>
 </body>
 </html>

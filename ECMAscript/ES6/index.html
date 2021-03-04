@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<body>
+    
+</body>
+</html>
+
+<script src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
+<script>
+// function getTextDatas(option){
+//     return new Promise((resolve,reject) => {
+//         $.ajax({
+//             url:option.url,
+//             type:'GET',
+//             data:option.data ? option.data : '',
+//             success(data){
+//                 resolve(data)
+//             },
+//             error(err){
+//                 reject(err)
+//             }
+//          })
+//     })
+// }
+
+// getTextDatas({
+//     url:'text1.json'
+// }).then(res => {
+//     console.log(res);
+//     const {id} = res;
+//     return getTextDatas({
+//         url:'text2.json',
+//         data:{
+//             id
+//         }
+//     })
+// }).then(res => {
+//     const {username} = res;
+//     return getTextDatas({
+//         url:'text3.json',
+//         data:{
+//             username
+//         }
+//     })
+// }).then(res => {
+//     console.log(res);
+// })
+
+function getTextDatas(option){
+    return new Promise((resolve,reject) => {
+        $.ajax({
+            url:option.url,
+            dataType:'JSON',
+            type:'GET',
+            data:option.data?option.data : '',
+            success(res){
+                resolve(res)
+            },
+            error(error){
+                reject(error)
+            }
+        })
+    })
+}
+
+getTextDatas({
+    url:'text1.json'
+}).then(res => {
+    console.log(res);
+    const id = res.id;
+    return getTextDatas({
+        url:'text2.json',
+        data:{
+            id
+        }
+    })
+}).then(res =>{
+    console.log(res);
+    const username = res.username;
+    return getTextDatas({
+        url:'text3.json',
+        data:{
+            username
+        }
+    })
+}).then(res => {
+    console.log(res);
+})
+</script>
